@@ -51,4 +51,10 @@ class BookController extends Controller
         $this->bookModel->update(['id' => $id], $data);
         $this->redirect('books');
     }
+
+    public function delete($id)
+    {
+        $this->bookModel->delete(['id' => $id]);
+        $this->redirect('books');
+    }
 }
