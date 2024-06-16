@@ -32,4 +32,10 @@ class BookController extends Controller
         $this->bookModel->create($data);
         $this->redirect('books');
     }
+
+    public function edit($id)
+    {
+        $data['book'] = $this->bookModel->getById($id);
+        $this->view('books/edit', $data);
+    }
 }
