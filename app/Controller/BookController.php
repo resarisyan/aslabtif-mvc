@@ -38,4 +38,17 @@ class BookController extends Controller
         $data['book'] = $this->bookModel->getById($id);
         $this->view('books/edit', $data);
     }
+
+    public function update($id)
+    {
+        $data = [
+            'nama' => $this->inputPost('nama'),
+            'deskripsi' => $this->inputPost('deskripsi')
+        ];
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+            $data['image'] = $this->uploadFile('image', 'books');
+        }
+        $this->bookModel->update(['id' => $id], $data);
+        $this->redirect('books');
+    }
 }
