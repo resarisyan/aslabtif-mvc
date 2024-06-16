@@ -1,2 +1,2 @@
 <?php
-define('BASEURL', 'http://localhost/aslabtif-mvc/');
+define('BASEURL', 'http://localhost/aslabtif-mvc');
