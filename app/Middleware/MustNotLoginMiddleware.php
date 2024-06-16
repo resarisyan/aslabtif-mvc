@@ -2,13 +2,13 @@
 
 namespace App\Middleware;
 
-class MustLoginMiddleware
+class MustNotLoginMiddleware
 {
     public function handle()
     {
         session_start();
-        if (!isset($_SESSION['user'])) {
-            header('Location: ' . BASEURL . '/login');
+        if (isset($_SESSION['user'])) {
+            header('Location: ' . BASEURL . '/books');
             exit;
         }
         return true;

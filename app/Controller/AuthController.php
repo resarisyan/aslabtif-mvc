@@ -54,8 +54,15 @@ class AuthController extends Controller
             $this->redirect('login');
         }
 
-
+        session_start();
         $_SESSION['user'] = $user;
         $this->redirect('books');
+    }
+
+    public function logout()
+    {
+        session_start();
+        session_destroy();
+        $this->redirect('login');
     }
 }
