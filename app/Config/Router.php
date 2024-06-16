@@ -17,7 +17,7 @@ class Router
         string $group = ''
     ) {
         if (!empty($group)) {
-            self::$routeGroups[$group][] = compact('method', 'path', 'handler', 'middleware');
+            self::$routeGroups[$group]['routes'][] = compact('method', 'path', 'handler', 'middleware');
         } else {
             $methods = is_array($method) ? $method : [$method];
             foreach ($methods as $method) {
@@ -31,8 +31,13 @@ class Router
         $prefix = isset($attributes['prefix']) ? trim($attributes['prefix'], '/') : '';
         $middleware = isset($attributes['middleware']) ? $attributes['middleware'] : [];
 
-        self::$routeGroups[] = compact('prefix', 'middleware');
+        $group = [
+            'prefix' => $prefix,
+            'middleware' => $middleware,
+            'routes' => []
+        ];
 
+        self::$routeGroups[] = $group;
         call_user_func($callback);
 
         array_pop(self::$routeGroups);
@@ -58,27 +63,34 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'];
 
         foreach (self::$routers as $router) {
-            self::processRoute($router, $path, $method);
+            if (self::processRoute($router, $path, $method)) {
+                return;
+            }
         }
 
         foreach (self::$routeGroups as $group) {
-            foreach ($group as $router) {
-                self::processRoute($router, $path, $method, $group['prefix'], $group['middleware']);
+            foreach ($group['routes'] as $router) {
+                if (self::processRoute($router, $path, $method, $group['prefix'], $group['middleware'])) {
+                    return;
+                }
             }
         }
 
         self::handleError(404);
     }
 
-    private static function processRoute($router, $path, $method, $prefix = '', $middleware = [])
+    private static function processRoute($router, $path, $method, $prefix = '', $groupMiddleware = [])
     {
         $pattern = "#^" . preg_replace('#\{([a-zA-Z0-9_]+)\}#', '([a-zA-Z0-9_]+)', $prefix . $router['path']) . "$#";
         if (preg_match($pattern, $path, $matches) && in_array($method, (array)$router['method'])) {
             array_shift($matches);
 
+            $middleware = array_merge($groupMiddleware, $router['middleware']);
             foreach ($middleware as $m) {
                 $instance = new $m();
-                $instance->handle();
+                if (!$instance->handle()) {
+                    return false;
+                }
             }
 
             $handler = $router['handler'];
@@ -87,8 +99,9 @@ class Router
 
             call_user_func_array([$controller, $function], $matches);
 
-            exit();
+            return true;
         }
+        return false;
     }
 
     private static function handleError(int $errorCode)
