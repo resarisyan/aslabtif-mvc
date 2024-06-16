@@ -34,7 +34,7 @@
                                             <td><?= $key + 1 ?></td>
                                             <td><?= $book['nama'] ?></td>
                                             <td>
-                                                <img src="<?= $book['image'] ?>" width="200" />
+                                                <img src="<?= BASEURL . 'storage/' . $book['image'] ?>" width="200" />
                                             </td>
                                             <td><?= $book['deskripsi'] ?></td>
                                         </tr>

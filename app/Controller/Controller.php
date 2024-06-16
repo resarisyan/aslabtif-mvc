@@ -49,13 +49,13 @@ class Controller
                 $date = date('Y-m-d');
                 $extension = pathinfo($fileName, PATHINFO_EXTENSION);
                 $newFileName = $date . '_' . $fileName . '_' . uniqid() . '.' . $extension;
-                $storagePath = __DIR__ . "/../public/storage/$destination";
+                $storagePath = __DIR__ . "/../../public/storage/$destination";
                 if (!file_exists($storagePath)) {
                     mkdir($storagePath, 0777, true);
                 }
                 $destinationPath = $storagePath . "/$newFileName";
                 move_uploaded_file($fileTmpName, $destinationPath);
-                return $destinationPath;
+                return $destination . "/$newFileName";
             } else {
                 die("File upload error: $fileError");
             }

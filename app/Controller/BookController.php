@@ -16,4 +16,20 @@ class BookController extends Controller
         $data['books'] = $this->bookModel->getAll();
         $this->view('books/index', $data);
     }
+
+    public function create()
+    {
+        $this->view('books/create');
+    }
+
+    public function store()
+    {
+        $data = [
+            'nama' => $this->inputPost('nama'),
+            'image' => $this->uploadFile('image', 'books'),
+            'deskripsi' => $this->inputPost('deskripsi')
+        ];
+        $this->bookModel->create($data);
+        $this->redirect('books');
+    }
 }
