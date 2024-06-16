@@ -10,7 +10,7 @@ class Database
     private $host = 'localhost';
     private $user = 'root';
     private $password = 'root';
-    private $db_name = 'db_star_role';
+    private $db_name = 'db_perpus';
     private $dbh;
     private $statement;
 
