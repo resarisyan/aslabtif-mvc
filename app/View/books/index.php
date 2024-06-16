@@ -26,6 +26,7 @@
                                         <th>Nama</th>
                                         <th>Deskripsi</th>
                                         <th>Image</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,6 +38,10 @@
                                                 <img src="<?= BASEURL . 'storage/' . $book['image'] ?>" width="200" />
                                             </td>
                                             <td><?= $book['deskripsi'] ?></td>
+                                            <td>
+                                                <a href="<?= BASEURL . '/books/edit/' . $book['id'] ?>" class="btn btn-warning">Edit</a>
+                                                <a href="<?= BASEURL . '/books/delete/' . $book['id'] ?>" class="btn btn-danger">Delete</a>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
