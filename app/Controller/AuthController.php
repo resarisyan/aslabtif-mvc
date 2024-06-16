@@ -35,5 +35,27 @@ class AuthController extends Controller
         }
 
         $this->userModel->create($data);
+        $this->redirect('login');
+    }
+
+    public function store_login()
+    {
+        $data = [
+            'username' => $this->inputPost('username'),
+            'password' => $this->inputPost('password')
+        ];
+
+        $user = $this->userModel->getWhere(['username' => $data['username']]);
+        if (!$user) {
+            $this->redirect('login');
+        }
+
+        if (!password_verify($data['password'], $user[0]['password'])) {
+            $this->redirect('login');
+        }
+
+
+        $_SESSION['user'] = $user;
+        $this->redirect('books');
     }
 }

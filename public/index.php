@@ -18,4 +18,5 @@ Router::add('GET', '/books/delete/{id}', [BookController::class, 'delete'], []);
 Router::add('GET', '/login', [AuthController::class, 'login'], []);
 Router::add('GET', '/register', [AuthController::class, 'register'], []);
 Router::add('POST', '/register', [AuthController::class, 'store_register'], []);
+Router::add('POST', '/login', [AuthController::class, 'store_login'], []);
 Router::run();
